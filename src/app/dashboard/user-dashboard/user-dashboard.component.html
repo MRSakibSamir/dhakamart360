@@ -1,0 +1,34 @@
+<div class="page container-fluid">
+  <h1 class="title mb-3">User Dashboard</h1>
+
+  <!-- Quick Stats -->
+  <div class="stats">
+    <div class="card indigo shadow-sm">
+      <div class="k">Total Orders</div>
+      <div class="v">{{ ordersCount | number }}</div>
+    </div>
+
+    <div class="card teal shadow-sm">
+      <div class="k">Pending Deliveries</div>
+      <div class="v">{{ pendingDeliveries | number }}</div>
+    </div>
+
+    <div class="card amber shadow-sm">
+      <div class="k">Wishlist</div>
+      <div class="v">{{ wishlistCount | number }}</div>
+    </div>
+
+    <div class="card emerald shadow-sm">
+      <div class="k">Wallet Balance</div>
+      <div class="v">{{ walletBalance | currency:'BDT':'symbol':'1.0-0' }}</div>
+    </div>
+
+    <div class="card purple shadow-sm">
+      <div class="k">Reward Points</div>
+      <div class="v">{{ rewardPoints | number }}</div>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="quick-links mt-3">
+    <a routerLink="/orders" class="btn btn-primary me-2">Back</a>

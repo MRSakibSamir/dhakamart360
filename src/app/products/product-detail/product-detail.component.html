@@ -1,0 +1,64 @@
+<!-- <p>product-detail works!</p> -->
+
+<div class="container my-4" *ngIf="purchase">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Purchase #{{ purchase.id }}</h3>
+    <a routerLink="/purchases" class="btn btn-outline-secondary btn-sm">
+      Back to Purchases
+    </a>
+  </div>
+
+  <div class="card shadow-sm rounded-4">
+    <div class="card-body">
+      <!-- Purchase Info -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <div class="fw-semibold">Date:</div>
+          <div>{{ purchase.date | date: 'mediumDate' }}</div>
+        </div>
+        <div class="col-md-4">
+          <div class="fw-semibold">Supplier:</div>
+          <div>{{ purchase.supplier?.name }}</div>
+        </div>
+        <div class="col-md-4">
+          <div class="fw-semibold">Status:</div>
+          <span class="badge bg-info text-dark">{{ purchase.status }}</span>
+        </div>
+      </div>
+
+      <!-- Purchase Items Table -->
+      <div class="table-responsive mb-3">
+        <table class="table table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Product</th>
+              <th class="text-end">Price ($)</th>
+              <th class="text-end">Qty</th>
+              <th class="text-end">Line Total ($)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of purchase.items">
+              <td>{{ item.product?.name }}</td>
+              <td class="text-end">{{ item.price | number:'1.2-2' }}</td>
+              <td class="text-end">{{ item.qty }}</td>
+              <td class="text-end">{{ item.lineTotal | number:'1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Summary -->
+      <div class="d-flex justify-content-end">
+        <div class="text-end">
+          <div class="fw-semibold">Total Amount ($):</div>
+          <h4 class="mb-0">{{ total | number:'1.2-2' }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading / Error States -->
+<div class="container my-4" *ngIf="loading">Loading purchase details...</div>
+<div class="container my-4 text-danger" *ngIf="error">{{ error }}</div>

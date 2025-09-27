@@ -1,0 +1,73 @@
+<div class="container my-4" *ngIf="purchase">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Purchase Details</h3>
+    <a routerLink="/purchases" class="btn btn-outline-secondary btn-sm">Back to Purchases</a>
+  </div>
+
+  <!-- Purchase Info -->
+  <div class="card shadow-sm rounded-4 mb-3">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-3"><strong>PO Number:</strong> {{ purchase.poNumber }}</div>
+        <div class="col-md-3"><strong>Date:</strong> {{ purchase.date | date }}</div>
+        <div class="col-md-3"><strong>Expected:</strong> {{ purchase.expectedDate | date }}</div>
+        <div class="col-md-3">
+          <strong>Status:</strong>
+          <span class="badge bg-info text-dark">{{ purchase.status }}</span>
+        </div>
+        <div class="col-md-6"><strong>Supplier:</strong> {{ purchase.supplier?.name }}</div>
+        <div class="col-md-6"><strong>Notes:</strong> {{ purchase.notes || '-' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Items Table -->
+  <div class="card shadow-sm rounded-4 mb-3">
+    <div class="card-body table-responsive">
+      <table class="table table-sm align-middle">
+        <thead class="table-light">
+          <tr>
+            <th style="width:40%">Product</th>
+            <th style="width:20%">Cost (৳)</th>
+            <th style="width:20%">Qty</th>
+            <th class="text-end" style="width:20%">Line Total (৳)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of purchase.items">
+            <td>{{ item.product?.name }}</td>
+            <td>৳ {{ item.cost | number:'1.2-2' }}</td>
+            <td>{{ item.qty }}</td>
+            <td class="text-end">৳ {{ item.cost * item.qty | number:'1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="row">
+    <div class="col-lg-6"></div>
+    <div class="col-lg-6">
+      <div class="card border-0 bg-light">
+        <div class="card-body">
+          <div class="d-flex justify-content-between"><span>Subtotal</span><strong>৳ {{ subtotal | number:'1.2-2' }}</strong></div>
+          <div class="d-flex justify-content-between"><span>Shipping</span><span>৳ {{ purchase.shipping | number:'1.2-2' }}</span></div>
+          <div class="d-flex justify-content-between"><span>Discount</span><span>৳ {{ purchase.discount | number:'1.2-2' }}</span></div>
+          <div class="d-flex justify-content-between"><span>Tax Rate</span><span>{{ purchase.taxRate }}%</span></div>
+          <div class="d-flex justify-content-between"><span>Tax Amount</span><span>৳ {{ taxAmount | number:'1.2-2' }}</span></div>
+          <hr>
+          <div class="d-flex justify-content-between fs-5">
+            <span>Grand Total</span>
+            <span class="fw-bold">৳ {{ grandTotal | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading / Not Found -->
+<div class="container my-4" *ngIf="!purchase">
+  <div class="alert alert-warning">Purchase not found.</div>
+</div>

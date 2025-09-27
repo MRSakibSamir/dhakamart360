@@ -1,0 +1,72 @@
+.container {
+  max-width: 1000px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+
+h3 {
+  text-align: center;
+}
+
+.form-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.form-container input {
+  padding: 6px;
+  flex: 1;
+  min-width: 120px;
+}
+
+.form-container .add-btn {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #333;
+  color: #fff;
+}
+
+th, td {
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.btn {
+  margin-right: 4px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.view-btn { background: #17a2b8; color: white; }
+.edit-btn { background: #8a58ff; color: white; }
+.save-btn { background: #28a745; color: white; }
+.cancel-btn { background: #6c757d; color: white; }
+.delete-btn { background: #dc3545; color: white; }
+
+@media (max-width: 700px) {
+  .form-container {
+    flex-direction: column;
+  }
+}
