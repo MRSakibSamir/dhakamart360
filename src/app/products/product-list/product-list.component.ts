@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../../services/product.service';
 
 interface Product {
   id: number;
@@ -19,23 +20,38 @@ export class ProductListComponent implements OnInit {
   newProduct: Product = { id: 0, name: '', category: '', price: 0, stock: 0 };
   editProductData: Product | null = null;
 
+  constructor(private productService: ProductService) {}
+
   ngOnInit(): void {
-    this.products = [
-      { id: 1, name: 'Rice', category: 'Grains', price: 60, stock: 30 },
-      { id: 2, name: 'Bread', category: 'Bakery', price: 25, stock: 50 },
-      { id: 3, name: 'Milk', category: 'Dairy', price: 40, stock: 20 },
-      { id: 4, name: 'Apples', category: 'Fruits', price: 30, stock: 40 },
-      
-      
-    ];
+    this.loadProducts();
+  }
+
+  // --- LOAD FROM BACKEND ---
+  loadProducts() {
+    this.productService.getAllProducts().subscribe({
+      next: (data) => {
+        this.products = data;
+        // Adjust nextId if needed based on backend data
+        const maxId = this.products.length > 0 ? Math.max(...this.products.map(p => p.id)) : 0;
+        this.nextId = maxId + 1;
+      },
+      error: (err) => console.error('Error loading products:', err)
+    });
   }
 
   // --- CREATE ---
   create() {
     if (!this.newProduct.name || !this.newProduct.category) return;
     const productToAdd: Product = { ...this.newProduct, id: this.nextId++ };
-    this.products.push(productToAdd);
-    this.newProduct = { id: 0, name: '', category: '', price: 0, stock: 0 };
+
+    // Save to backend
+    this.productService.createProduct(productToAdd).subscribe({
+      next: (createdProduct) => {
+        this.products.push(createdProduct);
+        this.newProduct = { id: 0, name: '', category: '', price: 0, stock: 0 };
+      },
+      error: (err) => console.error('Error creating product:', err)
+    });
   }
 
   // --- READ (VIEW) ---
@@ -53,10 +69,15 @@ export class ProductListComponent implements OnInit {
 
   saveEdit() {
     if (this.editProductData) {
-      this.products = this.products.map(p =>
-        p.id === this.editProductData!.id ? this.editProductData! : p
-      );
-      this.editProductData = null;
+      this.productService.updateProduct(this.editProductData).subscribe({
+        next: (updatedProduct) => {
+          this.products = this.products.map(p =>
+            p.id === updatedProduct.id ? updatedProduct : p
+          );
+          this.editProductData = null;
+        },
+        error: (err) => console.error('Error updating product:', err)
+      });
     }
   }
 
@@ -67,7 +88,12 @@ export class ProductListComponent implements OnInit {
   // --- DELETE ---
   delete(id: number) {
     if (confirm('Are you sure you want to delete this product?')) {
-      this.products = this.products.filter(p => p.id !== id);
+      this.productService.deleteProduct(id).subscribe({
+        next: () => {
+          this.products = this.products.filter(p => p.id !== id);
+        },
+        error: (err) => console.error('Error deleting product:', err)
+      });
     }
   }
 }
