@@ -15,6 +15,9 @@ export class CategoryListComponent implements OnInit {
   nextId: number = 4; // Next available ID for new category
   newCategory: Category = { id: 0, name: '' };
   editCategoryData: Category | null = null;
+customEditName: any;
+availableCategories: any;
+customCategoryName: any;
 
   ngOnInit(): void {
     // Initial sample categories

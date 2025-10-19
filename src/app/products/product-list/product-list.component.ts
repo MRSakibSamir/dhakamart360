@@ -16,7 +16,6 @@ interface Product {
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
-  nextId: number = 11;
   newProduct: Product = { id: 0, name: '', category: '', price: 0, stock: 0 };
   editProductData: Product | null = null;
 
@@ -31,9 +30,6 @@ export class ProductListComponent implements OnInit {
     this.productService.getAllProducts().subscribe({
       next: (data) => {
         this.products = data;
-        // Adjust nextId if needed based on backend data
-        const maxId = this.products.length > 0 ? Math.max(...this.products.map(p => p.id)) : 0;
-        this.nextId = maxId + 1;
       },
       error: (err) => console.error('Error loading products:', err)
     });
@@ -41,10 +37,18 @@ export class ProductListComponent implements OnInit {
 
   // --- CREATE ---
   create() {
-    if (!this.newProduct.name || !this.newProduct.category) return;
-    const productToAdd: Product = { ...this.newProduct, id: this.nextId++ };
+    if (
+      !this.newProduct.name.trim() ||
+      !this.newProduct.category.trim() ||
+      this.newProduct.price < 0 ||
+      this.newProduct.stock < 0
+    ) {
+      console.warn('Invalid product data');
+      return;
+    }
 
-    // Save to backend
+    const productToAdd: Product = { ...this.newProduct }; // backend assigns ID
+
     this.productService.createProduct(productToAdd).subscribe({
       next: (createdProduct) => {
         this.products.push(createdProduct);
@@ -58,7 +62,14 @@ export class ProductListComponent implements OnInit {
   read(id: number) {
     const product = this.products.find(p => p.id === id);
     if (product) {
-      alert(`Product Details:\nName: ${product.name}\nCategory: ${product.category}\nPrice: ${product.price}\nStock: ${product.stock}`);
+      // In real app, use modal instead of alert
+      alert(
+        `Product Details:\n` +
+        `Name: ${product.name}\n` +
+        `Category: ${product.category}\n` +
+        `Price: ${product.price}\n` +
+        `Stock: ${product.stock}`
+      );
     }
   }
 
@@ -69,6 +80,16 @@ export class ProductListComponent implements OnInit {
 
   saveEdit() {
     if (this.editProductData) {
+      if (
+        !this.editProductData.name.trim() ||
+        !this.editProductData.category.trim() ||
+        this.editProductData.price < 0 ||
+        this.editProductData.stock < 0
+      ) {
+        console.warn('Invalid product data');
+        return;
+      }
+
       this.productService.updateProduct(this.editProductData).subscribe({
         next: (updatedProduct) => {
           this.products = this.products.map(p =>

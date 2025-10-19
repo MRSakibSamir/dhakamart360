@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -6,20 +7,32 @@ import { Component } from '@angular/core';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  loginData = {
-    email: '',
-    password: ''
-  };
+  // loginData = {
+  //   email: '',
+  //   password: ''
+  // };
 
-  constructor() {}
+  constructor(private router: Router) {}
 
-  onSubmit() {
-    if (this.loginData.email && this.loginData.password) {
-      console.log('Login submitted:', this.loginData);
-      // Replace this with authentication service call
+  login(formData: any) {
+
+    const demoEmail = "mrsakib788@gmail.com";
+    const demoPassword = "sakib1234";
+
+    if (formData.email === demoEmail && formData.password === demoPassword) {
+      alert("Login Successful!");
+      this.router.navigate(['/admin-dashboard']);
     } else {
-      console.error('Invalid login data');
-    }
-  }
+      alert("Invalid email or password. Please try again.");
 
+  // onSubmit() {
+  //   if (this.loginData.email && this.loginData.password) {
+  //     console.log('Login submitted:', this.loginData);
+  //     // Replace this with authentication service call
+  //   } else {
+  //     console.error('Invalid login data');
+  //   }
+   }
+
+  }
 }

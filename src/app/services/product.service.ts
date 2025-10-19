@@ -15,11 +15,12 @@ export interface Product {
 })
 export class ProductService {
   private baseUrl = 'http://localhost:8080/api/products';
+  getCategories: any;
 
   constructor(private http: HttpClient) {}
 
   // Get all products
-  getAllProducts(): Observable<Product[]> {
+  getAllProducts(searchTerm: string, selectedCategory: string): Observable<Product[]> {
     return this.http.get<Product[]>(this.baseUrl);
   }
 

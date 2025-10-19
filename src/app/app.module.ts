@@ -90,6 +90,7 @@ import { ProductEditComponent } from './products/product-edit/product-edit.compo
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule
+    
   ],
   
   bootstrap: [AppComponent]
