@@ -1,103 +1,52 @@
 import { Component, OnInit } from '@angular/core';
-
-interface PurchaseItem {
-  product?: { name: string };
-  price: number;
-  qty: number;
-  lineTotal: number;
-}
-
-interface Purchase {
-  id: number;
-  date: Date;
-  supplier?: { name: string };
-  status: string;
-  items: PurchaseItem[];
-}
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-purchase-edit',                     // match component name
-  templateUrl: './product-edit.component.html',     // match template file
+  selector: 'app-product-edit',
+  templateUrl: './product-edit.component.html',
+  styleUrls: ['./product-edit.component.scss']
 })
 export class ProductEditComponent implements OnInit {
-  purchase: Purchase | null = null;
-  total: number = 0;
-  loading: boolean = true;
-  error: string = '';
+  productId: string | null = null;
+  product = {
+    name: '',
+    category: '',
+    price: 0,
+    stock: 0,
+    sku: ''
+  };
 
-  editItem: PurchaseItem | null = null;   // currently editing item
-  backupItem: PurchaseItem | null = null; // backup copy for cancel
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
-    this.fetchPurchase();
-  }
-
-  // Simulate fetching purchase from API
-  fetchPurchase(): void {
-    setTimeout(() => {
-      try {
-        const items: PurchaseItem[] = [
-          { product: { name: 'Item A' }, price: 25, qty: 4, lineTotal: 100 },
-          { product: { name: 'Item B' }, price: 15, qty: 6, lineTotal: 90 },
-        ];
-
-        this.purchase = {
-          id: 201,
-          date: new Date(),
-          supplier: { name: 'Acme Supplies' },
-          status: 'Received',
-          items,
-        };
-
-        this.calculateTotals();
-        this.loading = false;
-      } catch (err) {
-        this.error = 'Failed to load purchase details';
-        this.loading = false;
-      }
-    }, 500);
-  }
-
-  // Begin editing an item
-  edit(item: PurchaseItem): void {
-    this.editItem = { ...item }; // create a copy for editing
-    this.backupItem = item;      // original reference
-  }
-
-  // Cancel editing
-  cancelEdit(): void {
-    this.editItem = null;
-    this.backupItem = null;
-  }
-
-  // Save edited item
-  saveEdit(): void {
-    if (this.editItem && this.backupItem) {
-      this.backupItem.price = this.editItem.price;
-      this.backupItem.qty = this.editItem.qty;
-      this.updateLineTotal(this.backupItem);
+    this.productId = this.route.snapshot.paramMap.get('id');
+    if (this.productId) {
+      // Fetch product data from service based on productId
+      this.fetchProductData(this.productId);
     }
-    this.editItem = null;
-    this.backupItem = null;
-    this.calculateTotals();
   }
 
-  // Delete an item
-  deleteItem(item: PurchaseItem): void {
-    if (!this.purchase) return;
-    this.purchase.items = this.purchase.items.filter(i => i !== item);
-    this.calculateTotals();
+  fetchProductData(id: string) {
+    // Replace this with actual service call
+    console.log('Fetching product with ID:', id);
+    
+    // Mock data - replace with actual API call
+    this.product = {
+      name: 'Laptop',
+      category: 'Electronics',
+      price: 999.99,
+      stock: 15,
+      sku: 'LPTOPT123'
+    };
   }
 
-  // Update line total for a single item
-  updateLineTotal(item: PurchaseItem): void {
-    item.lineTotal = item.price * item.qty;
-    this.calculateTotals();
+  save() {
+    console.log('Updating product:', this.product);
+    // Add your product update logic here
+    this.router.navigate(['/products']);
   }
 
-  // Calculate grand total
-  calculateTotals(): void {
-    if (!this.purchase) return;
-    this.total = this.purchase.items.reduce((sum, item) => sum + item.lineTotal, 0);
+  cancel() {
+    this.router.navigate(['/products']);
   }
 }

@@ -9,11 +9,29 @@
       <div class="row g-3 align-items-end mb-4">
         <div class="col-md-3">
           <label class="form-label fw-semibold">Name</label>
-          <input type="text" class="form-control" placeholder="Product name" [(ngModel)]="newProduct.name">
+          <select class="form-select" [(ngModel)]="newProduct.name">
+            <option value="" disabled selected>Select a product</option>
+            <option value="Laptop">Laptop</option>
+            <option value="Smartphone">Smartphone</option>
+            <option value="Tablet">Tablet</option>
+            <option value="Headphones">Headphones</option>
+            <option value="Monitor">Monitor</option>
+            <option value="Keyboard">Keyboard</option>
+            <option value="Mouse">Mouse</option>
+            <option value="Other">Other</option>
+          </select>
         </div>
         <div class="col-md-3">
           <label class="form-label fw-semibold">Category</label>
-          <input type="text" class="form-control" placeholder="Category" [(ngModel)]="newProduct.category">
+          <select class="form-select" [(ngModel)]="newProduct.category">
+            <option value="" disabled selected>Select a category</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Computers">Computers</option>
+            <option value="Mobile Devices">Mobile Devices</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Office Equipment">Office Equipment</option>
+            <option value="Other">Other</option>
+          </select>
         </div>
         <div class="col-md-2">
           <label class="form-label fw-semibold">Price ($)</label>
@@ -48,13 +66,29 @@
               <!-- Name -->
               <td>
                 <span *ngIf="editProductData?.id !== p.id">{{ p.name }}</span>
-                <input *ngIf="editProductData?.id === p.id" [(ngModel)]="editProductData!.name" class="form-control form-control-sm">
+                <select *ngIf="editProductData?.id === p.id" class="form-select form-select-sm" [(ngModel)]="editProductData!.name">
+                  <option value="Laptop">Laptop</option>
+                  <option value="Smartphone">Smartphone</option>
+                  <option value="Tablet">Tablet</option>
+                  <option value="Headphones">Headphones</option>
+                  <option value="Monitor">Monitor</option>
+                  <option value="Keyboard">Keyboard</option>
+                  <option value="Mouse">Mouse</option>
+                  <option value="Other">Other</option>
+                </select>
               </td>
 
               <!-- Category -->
               <td>
                 <span *ngIf="editProductData?.id !== p.id">{{ p.category }}</span>
-                <input *ngIf="editProductData?.id === p.id" [(ngModel)]="editProductData!.category" class="form-control form-control-sm">
+                <select *ngIf="editProductData?.id === p.id" class="form-select form-select-sm" [(ngModel)]="editProductData!.category">
+                  <option value="Electronics">Electronics</option>
+                  <option value="Computers">Computers</option>
+                  <option value="Mobile Devices">Mobile Devices</option>
+                  <option value="Accessories">Accessories</option>
+                  <option value="Office Equipment">Office Equipment</option>
+                  <option value="Other">Other</option>
+                </select>
               </td>
 
               <!-- Price -->

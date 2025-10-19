@@ -9,7 +9,7 @@ interface PurchaseItem {
 
 interface Purchase {
   id: number;
-  date: Date;
+  date: string | Date;  // Fixed: Allow both string and Date types
   supplier?: { name: string };
   status: string;
   items: PurchaseItem[];
@@ -17,7 +17,7 @@ interface Purchase {
 
 @Component({
   selector: 'app-product-detail',
-  templateUrl:'./product-detail.component.html',
+  templateUrl: './product-detail.component.html',
 })
 export class PurchaseDetailComponent implements OnInit {
   purchase!: Purchase;
@@ -35,12 +35,12 @@ export class PurchaseDetailComponent implements OnInit {
       try {
         this.purchase = {
           id: 201,
-          date: new Date(),
+          date: new Date().toISOString(), // Fixed: Use ISO string format
           supplier: { name: 'Acme Supplies' },
           status: 'Received',
           items: [
-            { product: { name: 'Item A' }, price: 25, qty: 4 },
-            { product: { name: 'Item B' }, price: 15, qty: 6 },
+            { product: { name: 'Item A' }, price: 25.50, qty: 4 }, // Fixed: Use decimal numbers
+            { product: { name: 'Item B' }, price: 15.75, qty: 6 }, // Fixed: Use decimal numbers
           ],
         };
         this.calculateTotals();
