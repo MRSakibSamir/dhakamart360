@@ -1,1 +1,31 @@
-<p>category-edit works!</p>
+<div *ngIf="editCategory" class="card shadow-sm border-0 rounded-3 p-3 mb-3">
+  <div class="card-header bg-warning text-dark">
+    <h5 class="mb-0">✏ Edit Category</h5>
+  </div>
+
+  <div class="card-body">
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Category Name</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        [(ngModel)]="editCategory.name"
+        placeholder="Enter category name"
+        (keyup.enter)="save()">
+    </div>
+
+    <div *ngIf="editCategory.name === 'custom'" class="mb-3">
+      <input 
+        type="text" 
+        class="form-control" 
+        placeholder="Enter custom category name"
+        [(ngModel)]="customCategoryName"
+        (keyup.enter)="save()">
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-success" (click)="save()">💾 Save</button>
+      <button class="btn btn-secondary" (click)="cancel()">❌ Cancel</button>
+    </div>
+  </div>
+</div>
