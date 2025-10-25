@@ -7,41 +7,39 @@
 
       <!-- Add Product Form -->
       <div class="row g-3 align-items-end mb-4">
+        <!-- Product Name Dropdown -->
         <div class="col-md-3">
           <label class="form-label fw-semibold">Name</label>
-          <input 
-            type="text" 
-            class="form-control" 
-            placeholder="Product name" 
-            [(ngModel)]="newProduct.name">
+          <select class="form-select" [(ngModel)]="newProduct.name">
+            <option value="" disabled selected>Select product</option>
+            <option *ngFor="let productName of productNames" [value]="productName">{{ productName }}</option>
+          </select>
         </div>
+
+        <!-- Category Dropdown -->
         <div class="col-md-3">
           <label class="form-label fw-semibold">Category</label>
-          <input 
-            type="text" 
-            class="form-control" 
-            placeholder="Category" 
-            [(ngModel)]="newProduct.category">
+          <select class="form-select" [(ngModel)]="newProduct.category">
+            <option value="" disabled selected>Select category</option>
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+          </select>
         </div>
+
+        <!-- Price Input -->
         <div class="col-md-2">
           <label class="form-label fw-semibold">Price ($)</label>
-          <input 
-            type="number" 
-            class="form-control" 
-            placeholder="0.00" 
-            [(ngModel)]="newProduct.price">
+          <input type="number" class="form-control" placeholder="0.00" [(ngModel)]="newProduct.price">
         </div>
+
+        <!-- Stock Input -->
         <div class="col-md-2">
           <label class="form-label fw-semibold">Stock</label>
-          <input 
-            type="number" 
-            class="form-control" 
-            placeholder="0" 
-            [(ngModel)]="newProduct.stock">
+          <input type="number" class="form-control" placeholder="0" [(ngModel)]="newProduct.stock">
         </div>
+
+        <!-- Add Button -->
         <div class="col-md-2 d-grid">
-          <button class="btn btn-primary fw-semibold shadow-sm" (click)="create()">➕ Add Product
-          </button>
+          <button class="btn btn-primary fw-semibold shadow-sm" (click)="create()">➕ Add Product</button>
         </div>
       </div>
 
@@ -61,22 +59,38 @@
           <tbody>
             <tr *ngFor="let product of products; let i = index">
               <td>{{ i + 1 }}</td>
+
+              <!-- Product Name -->
               <td>
                 <span *ngIf="!product.editing">{{ product.name }}</span>
-                <input *ngIf="product.editing" [(ngModel)]="product.name" class="form-control form-control-sm">
+                <select *ngIf="product.editing" [(ngModel)]="product.name" class="form-select form-select-sm">
+                  <option value="" disabled>Select product</option>
+                  <option *ngFor="let productName of productNames" [value]="productName">{{ productName }}</option>
+                </select>
               </td>
+
+              <!-- Category -->
               <td>
                 <span *ngIf="!product.editing">{{ product.category }}</span>
-                <input *ngIf="product.editing" [(ngModel)]="product.category" class="form-control form-control-sm">
+                <select *ngIf="product.editing" [(ngModel)]="product.category" class="form-select form-select-sm">
+                  <option value="" disabled>Select category</option>
+                  <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                </select>
               </td>
+
+              <!-- Price -->
               <td class="text-end">
                 <span *ngIf="!product.editing">{{ product.price | currency }}</span>
                 <input *ngIf="product.editing" type="number" [(ngModel)]="product.price" class="form-control form-control-sm">
               </td>
+
+              <!-- Stock -->
               <td class="text-end">
                 <span *ngIf="!product.editing">{{ product.stock }}</span>
                 <input *ngIf="product.editing" type="number" [(ngModel)]="product.stock" class="form-control form-control-sm">
               </td>
+
+              <!-- Actions -->
               <td class="text-center">
                 <!-- Normal Mode -->
                 <div *ngIf="!product.editing">
@@ -91,6 +105,8 @@
                 </div>
               </td>
             </tr>
+
+            <!-- No Products Message -->
             <tr *ngIf="products.length === 0">
               <td colspan="6" class="text-center text-muted py-3">
                 🚫 No products available. Add some items above!

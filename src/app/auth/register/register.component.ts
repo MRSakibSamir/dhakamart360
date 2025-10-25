@@ -7,12 +7,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  // registerData = {
-  //   name: '',
-  //   email: '',
-  //   password: '',
-  //   confirmPassword: ''
-  // };
+  registerData = {
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  };
 
   // get passwordsDoNotMatch(): boolean {
   //   return (

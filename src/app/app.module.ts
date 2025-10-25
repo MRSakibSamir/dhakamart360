@@ -42,6 +42,10 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductEditComponent } from './products/product-edit/product-edit.component';
 
+import { ProductFormComponent } from './products/product-form/product-form.component';
+import { CategoryFormComponent } from './categories/category-form/category-form.component';
+import { CustomerFormComponent } from './customers/customer-form/customer-form.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -81,7 +85,10 @@ import { ProductEditComponent } from './products/product-edit/product-edit.compo
     NavbarComponent,
     SidebarComponent,
     FooterComponent,
-    ProductEditComponent
+    ProductEditComponent,
+    ProductFormComponent,
+    CategoryFormComponent,
+    CustomerFormComponent
     
   ],
   imports: [

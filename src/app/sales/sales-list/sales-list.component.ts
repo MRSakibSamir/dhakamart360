@@ -33,6 +33,8 @@ export class SalesListComponent implements OnInit {
     { id: 3, name: 'Washing Powder 1kg', price: 220 },
   ];
 
+  constructor(private fb: FormBuilder) {}
+
   ngOnInit(): void {
     this.form = this.fb.group({
       date: [new Date().toISOString().slice(0,10), Validators.required],
@@ -45,8 +47,6 @@ export class SalesListComponent implements OnInit {
     });
   }
 
-  constructor(private fb: FormBuilder) {}
-
   // ---- Items helpers ----
   get items(): FormArray { return this.form.get('items') as FormArray; }
 
@@ -58,8 +58,13 @@ export class SalesListComponent implements OnInit {
     });
   }
 
-  addItem(): void { this.items.push(this.createItem()); }
-  removeItem(i: number): void { if (this.items.length > 1) this.items.removeAt(i); }
+  addItem(): void {
+    this.items.push(this.createItem());
+  }
+
+  removeItem(i: number): void {
+    if (this.items.length > 1) this.items.removeAt(i);
+  }
 
   onProductChange(i: number): void {
     const group = this.items.at(i) as FormGroup;
@@ -68,12 +73,22 @@ export class SalesListComponent implements OnInit {
     if (found) group.patchValue({ price: found.price }, { emitEvent: false });
   }
 
+  onQtyChange(i: number): void {
+    const group = this.items.at(i) as FormGroup;
+    const qty = Number(group.get('qty')?.value || 1);
+    if (qty < 1) group.patchValue({ qty: 1 }, { emitEvent: false });
+  }
+
   // ---- Calculations ----
   lineTotal(i: number): number {
     const g = this.items.at(i) as FormGroup;
     const qty = Number(g.get('qty')?.value || 0);
     const price = Number(g.get('price')?.value || 0);
     return qty * price;
+  }
+
+  totalQuantity(): number {
+    return this.items.controls.reduce((sum, g) => sum + Number(g.get('qty')?.value || 0), 0);
   }
 
   get subtotal(): number {
@@ -111,15 +126,18 @@ export class SalesListComponent implements OnInit {
     // TODO: replace with service call
     console.log('SALE SUBMIT:', payload);
     alert('Sale saved! (check console for payload)');
+
+    // Reset form and keep at least one item row
     this.form.reset({
       date: new Date().toISOString().slice(0,10),
       customerId: null,
       status: 'Placed',
-      items: [],
+      // items: [],
       discount: 0,
       taxRate: 5,
       notes: ''
     });
+    this.items.clear();
     this.items.push(this.createItem());
   }
 }

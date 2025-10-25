@@ -22,13 +22,15 @@ export class SalesAddComponent implements OnInit {
   customers: Customer[] = [];
   products: Product[] = [];
 
+  // Store line totals per row
+  lineTotals: number[] = [];
+
   constructor(
     private fb: FormBuilder,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    // Initialize form
     this.form = this.fb.group({
       date: [new Date().toISOString().substring(0, 10), Validators.required],
       customerId: [null, Validators.required],
@@ -36,7 +38,6 @@ export class SalesAddComponent implements OnInit {
       items: this.fb.array([])
     });
 
-    // Example data (replace with API call)
     this.customers = [
       { id: 1, name: 'Customer A' },
       { id: 2, name: 'Customer B' }
@@ -48,7 +49,7 @@ export class SalesAddComponent implements OnInit {
       { id: 3, name: 'Product Z', price: 400 }
     ];
 
-    // Start with one empty item
+    // Start with one item
     this.addItem();
   }
 
@@ -64,12 +65,21 @@ export class SalesAddComponent implements OnInit {
       price: [0, [Validators.required, Validators.min(0)]],
       qty: [1, [Validators.required, Validators.min(1)]]
     });
+
     this.items.push(item);
+    this.lineTotals.push(0); // initialize line total for this row
+
+    // Subscribe to changes in this row to update line total
+    item.valueChanges.subscribe(val => {
+      const index = this.items.controls.indexOf(item);
+      this.lineTotals[index] = (val.price || 0) * (val.qty || 0);
+    });
   }
 
   // Remove item row
   removeItem(index: number): void {
     this.items.removeAt(index);
+    this.lineTotals.splice(index, 1);
   }
 
   // On product selection, auto-fill price
@@ -82,12 +92,14 @@ export class SalesAddComponent implements OnInit {
     }
   }
 
-  // Total amount calculation
+  // Total quantity
+  get totalQty(): number {
+    return this.items.controls.reduce((sum, row) => sum + (row.value.qty || 0), 0);
+  }
+
+  // Total amount
   get total(): number {
-    return this.items.controls.reduce((sum, row) => {
-      const val = row.value;
-      return sum + (val.price * val.qty);
-    }, 0);
+    return this.lineTotals.reduce((sum, val) => sum + val, 0);
   }
 
   // Submit form

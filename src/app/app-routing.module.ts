@@ -39,6 +39,7 @@ import { SalesListComponent } from './sales/sales-list/sales-list.component';
 // import { ShopProfileComponent } from './settings/shop-profile/shop-profile.component';
 // import { TaxSettingsComponent } from './settings/tax-settings/tax-settings.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import { ProductFormComponent } from './products/product-form/product-form.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -56,12 +57,12 @@ const routes: Routes = [
 
   // Products
   { path: 'products', component: ProductListComponent },
-  { path: 'products/add', component: ProductAddComponent },
-  { path: 'products/edit/:id', component: ProductEditComponent },
+  { path: 'products/add', component: ProductFormComponent },
+  { path: 'products/edit/:id', component: ProductFormComponent },
   // { path: 'products/view/:id', component: ProductDetailComponent },
 
   // Categories
-  { path: 'categories', component: CategoryListComponent },
+  { path: 'categories', component: CategoryAddComponent },
   { path: 'categories/add', component: CategoryAddComponent },
   { path: 'categories/edit/:id', component: CategoryEditComponent },
 

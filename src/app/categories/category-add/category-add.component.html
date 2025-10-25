@@ -5,13 +5,32 @@
     </div>
     <div class="card-body">
 
-      <!-- Add Category Form -->
+      <!-- Add New Category Form -->
       <div class="row g-3 align-items-end mb-4">
-        <div class="col-md-8">
-          <label class="form-label fw-semibold">Category Name</label>
-          <input type="text" class="form-control" placeholder="Enter category" [(ngModel)]="newCategory.name">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Name</label>
+          <input type="text" class="form-control" placeholder="Category Name" [(ngModel)]="newCategory.name" name="newName">
         </div>
-        <div class="col-md-4 d-grid">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Description</label>
+          <input type="text" class="form-control" placeholder="Description" [(ngModel)]="newCategory.description" name="newDescription">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Price</label>
+          <input type="number" class="form-control" placeholder="Price" [(ngModel)]="newCategory.price" name="newPrice">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Quantity</label>
+          <input type="number" class="form-control" placeholder="Quantity" [(ngModel)]="newCategory.quantity" name="newQuantity">
+        </div>
+        <div class="col-md-4 mt-2">
+          <label class="form-label fw-semibold">Category</label>
+          <select class="form-select" [(ngModel)]="newCategory.parentCategory" name="newParent">
+            <option [ngValue]="null">None</option>
+            <option *ngFor="let cat of categories" [ngValue]="cat">{{ cat.name }}</option>
+          </select>
+        </div>
+        <div class="col-md-2 d-grid mt-2">
           <button class="btn btn-success fw-semibold shadow-sm" (click)="create()">➕ Add Category</button>
         </div>
       </div>
@@ -22,21 +41,40 @@
           <thead class="table-dark">
             <tr>
               <th>#</th>
-              <th>Category Name</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Parent</th>
               <th class="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let c of categories; index as i">
               <td>{{ i + 1 }}</td>
-
-              <!-- Category Name -->
               <td>
                 <span *ngIf="editCategoryData?.id !== c.id">{{ c.name }}</span>
-                <input *ngIf="editCategoryData?.id === c.id" [(ngModel)]="editCategoryData!.name" class="form-control form-control-sm">
+                <input *ngIf="editCategoryData?.id === c.id" [(ngModel)]="editCategoryData!.name" class="form-control form-control-sm" name="editName{{c.id}}">
               </td>
-
-              <!-- Actions -->
+              <td>
+                <span *ngIf="editCategoryData?.id !== c.id">{{ c.description }}</span>
+                <input *ngIf="editCategoryData?.id === c.id" [(ngModel)]="editCategoryData!.description" class="form-control form-control-sm" name="editDesc{{c.id}}">
+              </td>
+              <td>
+                <span *ngIf="editCategoryData?.id !== c.id">{{ c.price }}</span>
+                <input *ngIf="editCategoryData?.id === c.id" type="number" [(ngModel)]="editCategoryData!.price" class="form-control form-control-sm" name="editPrice{{c.id}}">
+              </td>
+              <td>
+                <span *ngIf="editCategoryData?.id !== c.id">{{ c.quantity }}</span>
+                <input *ngIf="editCategoryData?.id === c.id" type="number" [(ngModel)]="editCategoryData!.quantity" class="form-control form-control-sm" name="editQty{{c.id}}">
+              </td>
+              <td>
+                <span *ngIf="editCategoryData?.id !== c.id">{{ c.parentCategory?.name || 'None' }}</span>
+                <select *ngIf="editCategoryData?.id === c.id" [(ngModel)]="editCategoryData!.parentCategory" class="form-select form-select-sm" name="editParent{{c.id}}">
+                  <option [ngValue]="null">None</option>
+                  <option *ngFor="let cat of categories" [ngValue]="cat" [disabled]="cat.id === c.id">{{ cat.name }}</option>
+                </select>
+              </td>
               <td class="text-center">
                 <ng-container *ngIf="editCategoryData?.id !== c.id; else editMode">
                   <button class="btn btn-info btn-sm me-1 shadow-sm" (click)="read(c.id)">👁 View</button>
@@ -50,11 +88,8 @@
               </td>
             </tr>
 
-            <!-- Empty State -->
             <tr *ngIf="categories.length === 0">
-              <td colspan="3" class="text-center text-muted py-3">
-                🚫 No categories available. Add one above!
-              </td>
+              <td colspan="7" class="text-center text-muted py-3">🚫 No categories available. Add one above!</td>
             </tr>
           </tbody>
         </table>
@@ -64,13 +99,3 @@
   </div>
 </div>
 
-<!-- Hover effect for buttons -->
-<style>
-  .btn {
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
-  .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  }
-</style>
